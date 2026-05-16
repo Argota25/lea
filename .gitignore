@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+.pytest_cache/
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# Flask
+instance/
+*.db
+*.sqlite3
+
+# Environment variables (NEVER commit secrets)
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# AWS
+.aws/
+
+# Project-specific (sample audio for dev only)
+static/audio/*.mp3
+static/audio/*.flac
+!static/audio/.gitkeep
