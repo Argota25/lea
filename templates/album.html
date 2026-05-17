@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+
+{% block title %}{{ album['title'] }}{% endblock %}
+
+{% block content %}
+<section class="album-detail">
+    <div class="album-detail-header">
+        <div class="album-art-large">
+            <div class="placeholder">{{ album['artist'][:1] }}</div>
+        </div>
+        <div class="album-detail-info">
+            <p class="album-eyebrow">Album</p>
+            <h1>{{ album['title'] }}</h1>
+            <p class="artist-large">{{ album['artist'] }}</p>
+            {% if album['release_date'] %}
+                <p class="release-date">Released {{ album['release_date'] }}</p>
+            {% endif %}
+            <p class="price-large">${{ '%.2f' | format(album['price_cents'] / 100) }}</p>
+            <a href="#" class="buy-button">Buy Album</a>
+        </div>
+    </div>
+
+    {% if album['description'] %}
+    <div class="album-description">
+        <p>{{ album['description'] }}</p>
+    </div>
+    {% endif %}
+
+    <div class="tracklist">
+        <h2>Tracklist</h2>
+        <ol class="tracks">
+            {% for track in tracks %}
+            <li class="track">
+                <span class="track-number">{{ '%02d' | format(track['track_number']) }}</span>
+                <span class="track-title">{{ track['title'] }}</span>
+                <span class="track-duration">
+                    {% if track['duration_seconds'] %}
+                        {{ (track['duration_seconds'] // 60) }}:{{ '%02d' | format(track['duration_seconds'] % 60) }}
+                    {% endif %}
+                </span>
+            </li>
+            {% endfor %}
+        </ol>
+    </div>
+</section>
+{% endblock %}
