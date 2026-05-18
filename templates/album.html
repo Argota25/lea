@@ -16,8 +16,19 @@
                 <p class="release-date">Released {{ album['release_date'] }}</p>
             {% endif %}
             <p class="price-large">${{ '%.2f' | format(album['price_cents'] / 100) }}</p>
-            <a href="#" class="buy-button">Buy Album</a>
-        </div>
+    {% if owned %}
+        <div class="owned-badge">✓ You own this album</div>
+        <a href="{{ url_for('library') }}" class="buy-button">Go to Library</a>
+    {% else %}
+        {% if session.get('user_id') %}
+            <form action="{{ url_for('buy', album_id=album['id']) }}" method="post">
+                <button type="submit" class="buy-button">Buy Album</button>
+            </form>
+        {% else %}
+            <a href="{{ url_for('login') }}" class="buy-button">Sign in to buy</a>
+        {% endif %}
+    {% endif %}
+            </div>
     </div>
 
     {% if album['description'] %}

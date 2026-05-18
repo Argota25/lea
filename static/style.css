@@ -532,3 +532,15 @@ footer {
     margin-bottom: 2rem;
     font-size: 1.1rem;
 }
+.owned-badge {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: #1a2a1a;
+    border: 1px solid #2a4a2a;
+    color: #6acc6a;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1.5rem;
+}
