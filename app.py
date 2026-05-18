@@ -83,6 +83,22 @@ def album(album_id):
     )
     return render_template("album.html", album=album, tracks=tracks)
 
+@app.route("/library")
+@login_required
+def library():
+    """User's library — albums they've purchased."""
+    user_id = session["user_id"]
+    albums = query_db(
+        """
+        SELECT albums.* FROM albums
+        JOIN purchases ON purchases.album_id = albums.id
+        WHERE purchases.user_id = ?
+        ORDER BY purchases.purchased_at DESC
+        """,
+        [user_id]
+    )
+    return render_template("library.html", albums=albums)
+
 
 # ---------- Auth routes ----------
 

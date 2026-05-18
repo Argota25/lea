@@ -13,7 +13,7 @@
             <div class="nav-links">
                 <a href="{{ url_for('index') }}">Browse</a>
                 {% if session.get('user_id') %}
-                    <a href="#">Library</a>
+                    <a href="{{ url_for('library') }}">Library</a>
                     <a href="{{ url_for('logout') }}">Sign out</a>
                 {% else %}
                     <a href="{{ url_for('login') }}">Sign in</a>

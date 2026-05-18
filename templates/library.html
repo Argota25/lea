@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block title %}Your Library{% endblock %}
+
+{% block content %}
+<section class="library">
+    <h1>Your Library</h1>
+    <p class="library-subtitle">Albums you own.</p>
+    
+    {% if albums %}
+        <div class="library-grid">
+            {% for album in albums %}
+            <a href="{{ url_for('album', album_id=album['id']) }}" class="library-card">
+                <div class="library-art">
+                    <div class="placeholder">{{ album['artist'][:1] }}</div>
+                </div>
+                <div class="library-meta">
+                    <h3>{{ album['title'] }}</h3>
+                    <p>{{ album['artist'] }}</p>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="library-empty">
+            <p>You don't own any albums yet.</p>
+            <a href="{{ url_for('index') }}" class="auth-button" style="max-width: 300px; display: inline-block;">Browse albums</a>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}
