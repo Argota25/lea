@@ -302,3 +302,165 @@ footer {
     font-variant-numeric: tabular-nums;
     font-size: 0.95rem;
 }
+
+/* ---------- Track player + notes ---------- */
+
+.track {
+    display: block;
+    padding: 1.5rem 0.5rem;
+    border-bottom: 1px solid #1f1f1f;
+    transition: background 0.15s;
+}
+
+.track:hover {
+    background: #0d0d0d;
+}
+
+.track-row {
+    display: grid;
+    grid-template-columns: 50px 1fr auto;
+    gap: 1.5rem;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.track-player {
+    width: 100%;
+    margin-top: 0.5rem;
+    filter: invert(0.85);  /* dark-mode-friendly audio controls */
+}
+
+.track-notes {
+    margin-top: 1rem;
+    padding: 1rem 1.5rem;
+    color: #999;
+    font-style: italic;
+    font-size: 0.95rem;
+    border-left: 2px solid #2a2a2a;
+    line-height: 1.6;
+}
+
+/* ---------- Auth pages ---------- */
+
+.auth-page {
+    max-width: 420px;
+    margin: 0 auto;
+    padding: 2rem 0;
+}
+
+.auth-page h1 {
+    font-size: 2.5rem;
+    font-weight: 900;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+}
+
+.auth-subtitle {
+    color: #888;
+    margin-bottom: 3rem;
+}
+
+.auth-form {
+    margin-bottom: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #888;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    background: #111;
+    border: 1px solid #222;
+    border-radius: 4px;
+    color: #f0f0f0;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: border-color 0.15s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #555;
+}
+
+.form-hint {
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.auth-button {
+    width: 100%;
+    padding: 1rem;
+    background: #fff;
+    color: #000;
+    border: none;
+    border-radius: 4px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-size: 0.85rem;
+    font-family: inherit;
+    cursor: pointer;
+    transition: transform 0.15s, background 0.15s;
+}
+
+.auth-button:hover {
+    transform: translateY(-2px);
+    background: #f0f0f0;
+}
+
+.auth-switch {
+    text-align: center;
+    color: #888;
+    font-size: 0.95rem;
+}
+
+.auth-switch a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.auth-switch a:hover {
+    text-decoration: underline;
+}
+
+/* ---------- Flash messages ---------- */
+
+.flash-container {
+    max-width: 1200px;
+    margin: 1rem auto 0;
+    padding: 0 2rem;
+}
+
+.flash {
+    padding: 1rem 1.5rem;
+    background: #111;
+    border-left: 3px solid #4a9eff;
+    color: #f0f0f0;
+    margin-bottom: 0.5rem;
+    border-radius: 0 4px 4px 0;
+    animation: flashIn 0.3s ease-out;
+}
+
+@keyframes flashIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

@@ -31,13 +31,22 @@
         <ol class="tracks">
             {% for track in tracks %}
             <li class="track">
-                <span class="track-number">{{ '%02d' | format(track['track_number']) }}</span>
-                <span class="track-title">{{ track['title'] }}</span>
-                <span class="track-duration">
-                    {% if track['duration_seconds'] %}
-                        {{ (track['duration_seconds'] // 60) }}:{{ '%02d' | format(track['duration_seconds'] % 60) }}
-                    {% endif %}
-                </span>
+                <div class="track-row">
+                    <span class="track-number">{{ '%02d' | format(track['track_number']) }}</span>
+                    <span class="track-title">{{ track['title'] }}</span>
+                    <span class="track-duration">
+                        {% if track['duration_seconds'] %}
+                            {{ (track['duration_seconds'] // 60) }}:{{ '%02d' | format(track['duration_seconds'] % 60) }}
+                        {% endif %}
+                    </span>
+                </div>
+                <audio controls preload="metadata" class="track-player">
+                    <source src="{{ track['audio_url'] }}" type="audio/mpeg">
+                    Your browser does not support audio playback.
+                </audio>
+                {% if track['notes'] %}
+                <p class="track-notes">{{ track['notes'] }}</p>
+                {% endif %}
             </li>
             {% endfor %}
         </ol>
