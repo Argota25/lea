@@ -169,12 +169,67 @@ def buy(album_id):
 @app.route("/purchase/success")
 @login_required
 def purchase_success():
-    """STUB: real implementation in Phase 1.6b. For now just confirms we got here."""
+    """Verify Stripe payment succeeded, then record the purchase."""
     session_id = request.args.get("session_id")
-    flash(f"Stripe sent us back with session_id: {session_id[:20]}... (Part B will record the purchase)")
-    return redirect(url_for("index"))
-
-
+    if not session_id:
+        flash("Invalid session.")
+        return redirect(url_for("index"))
+    
+    try:
+        # SERVER-TO-SERVER VERIFICATION.
+        # We call Stripe's API to ask "is this session real and paid?"
+        # The redirect from Stripe is just a HINT; this call is the proof.
+        checkout_session = stripe.checkout.Session.retrieve(session_id)
+        
+        # Even if the session exists, only proceed if Stripe says it was actually paid
+        if checkout_session.payment_status != "paid":
+            flash("Payment was not completed.")
+            return redirect(url_for("index"))
+        
+        # Pull user_id and album_id from metadata.
+        # Stripe's StripeObject exposes metadata via attribute access (Stripe-native pattern).
+        try:
+            user_id_raw = checkout_session.metadata.user_id
+            album_id_raw = checkout_session.metadata.album_id
+        except AttributeError:
+            flash("Purchase metadata missing — please contact support.")
+            return redirect(url_for("index"))
+        
+        # Defensive: empty strings would slip past the AttributeError above
+        if not user_id_raw or not album_id_raw:
+            flash("Purchase metadata incomplete — please contact support.")
+            return redirect(url_for("index"))
+        
+        user_id = int(user_id_raw)
+        album_id = int(album_id_raw)
+        
+        # Defense in depth: verify the metadata user matches the currently logged-in user.
+        # This stops someone from copying a success URL from another user's checkout.
+        if user_id != session["user_id"]:
+            flash("That checkout session doesn't belong to you.")
+            return redirect(url_for("index"))
+        
+        # Record the purchase. UNIQUE(user_id, album_id) prevents duplicates if the user
+        # refreshes this page — second insert will fail gracefully.
+        db = get_db()
+        try:
+            db.execute(
+                "INSERT INTO purchases (user_id, album_id, stripe_charge_id) VALUES (?, ?, ?)",
+                [user_id, album_id, checkout_session.payment_intent]
+            )
+            db.commit()
+            flash("Album purchased! Welcome to your library.")
+        except sqlite3.IntegrityError:
+            # User already owns it — could happen on page refresh after purchase
+            flash("You already own this album.")
+        
+        return redirect(url_for("library"))
+    
+    except Exception as e:
+        # Log to terminal for debugging, show user a clean message
+        print(f"[purchase_success] {type(e).__name__}: {e}", flush=True)
+        flash("Could not verify purchase. Please try again or contact support.")
+        return redirect(url_for("index"))
 # ---------- Auth routes ----------
 
 @app.route("/register", methods=["GET", "POST"])
