@@ -112,6 +112,28 @@ def library():
     )
     return render_template("library.html", albums=albums)
 
+@app.route("/track/<int:track_id>")
+@login_required
+def track(track_id):
+    """Track liner notes page — owner-only content."""
+    track = query_db("SELECT * FROM tracks WHERE id = ?", [track_id], one=True)
+    if track is None:
+        abort(404)
+    
+    album = query_db("SELECT * FROM albums WHERE id = ?", [track['album_id']], one=True)
+    
+    # Ownership gate: only album owners see liner notes
+    owned = query_db(
+        "SELECT id FROM purchases WHERE user_id = ? AND album_id = ?",
+        [session["user_id"], album['id']],
+        one=True
+    )
+    if owned is None:
+        flash("Liner notes are exclusive to album owners.")
+        return redirect(url_for("album", album_id=album['id']))
+    
+    return render_template("track.html", track=track, album=album)
+
 
 # ---------- Purchase routes ----------
 
@@ -202,7 +224,7 @@ def purchase_success():
         
         user_id = int(user_id_raw)
         album_id = int(album_id_raw)
-        
+
         # Defense in depth: verify the metadata user matches the currently logged-in user.
         # This stops someone from copying a success URL from another user's checkout.
         if user_id != session["user_id"]:

@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+
+{% block title %}{{ track['title'] }}{% endblock %}
+
+{% block content %}
+<section class="track-page">
+    <p class="track-page-eyebrow">
+        <a href="{{ url_for('album', album_id=album['id']) }}">← {{ album['title'] }}</a>
+    </p>
+    
+    <div class="track-page-header">
+        <p class="track-page-number">Track {{ '%02d' | format(track['track_number']) }}</p>
+        <h1>{{ track['title'] }}</h1>
+        <p class="track-page-artist">{{ album['artist'] }}</p>
+    </div>
+    
+    <div class="track-page-player">
+        <audio controls preload="metadata" class="track-player">
+            <source src="{{ track['audio_url'] }}" type="audio/mpeg">
+            Your browser does not support audio playback.
+        </audio>
+    </div>
+    
+    {% if track['notes'] %}
+    <div class="liner-section">
+        <h2>Artist Notes</h2>
+        <p class="liner-content">{{ track['notes'] }}</p>
+    </div>
+    {% endif %}
+    
+    {% if track['lyrics'] %}
+    <div class="liner-section">
+        <h2>Lyrics</h2>
+        <p class="liner-content lyrics">{{ track['lyrics'] }}</p>
+    </div>
+    {% endif %}
+    
+    {% if not track['notes'] and not track['lyrics'] %}
+    <div class="liner-empty">
+        <p>No liner notes for this track yet.</p>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

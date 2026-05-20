@@ -44,7 +44,13 @@
             <li class="track">
                 <div class="track-row">
                     <span class="track-number">{{ '%02d' | format(track['track_number']) }}</span>
-                    <span class="track-title">{{ track['title'] }}</span>
+                    <span class="track-title">
+    {% if owned %}
+        <a href="{{ url_for('track', track_id=track['id']) }}">{{ track['title'] }}</a>
+    {% else %}
+        {{ track['title'] }}
+    {% endif %}
+</span>
                     <span class="track-duration">
                         {% if track['duration_seconds'] %}
                             {{ (track['duration_seconds'] // 60) }}:{{ '%02d' | format(track['duration_seconds'] % 60) }}
